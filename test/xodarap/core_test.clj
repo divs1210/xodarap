@@ -10,13 +10,13 @@
     (*' n (rec (fact (dec n))))))
 
 (deftest simple-recursion-test
-  (is (== (apply *' (range 1 5001))
-          (fact 5000))))
+  (is (== (apply *' (range 1 10001))
+          (fact 10000))))
 
 
 ;; Mutual Recursion
 ;; ================
-(declare EVEN? rec:EVEN?)
+(declarec EVEN?)
 
 (defrec ODD? [n]
   (if (zero? n)
@@ -29,5 +29,5 @@
     (rec (ODD? (dec n)))))
 
 (deftest mutual-recursion-test
-  (is (ODD? 5001))
-  (is (EVEN? 5000)))
+  (is (ODD? 10001))
+  (is (EVEN? 10000)))
