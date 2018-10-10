@@ -9,10 +9,10 @@ The JVM puts a hard limit on how deep our functions can recurse without blowing 
 ```clojure
 ;; Ex. 1
 ;; =====
-(defn unsafe-factorial [x]
-  (if (< x 2)
-    x
-    (*' x (unsafe-factorial (dec x)))))
+(defn unsafe-factorial [n]
+  (if (< n 2)
+    1
+    (*' n (unsafe-factorial (dec n)))))
 
 (unsafe-factorial 5000)
 ;; => StackOverflowError   clojure.lang.Numbers.lt (Numbers.java:3816)
@@ -70,7 +70,7 @@ in all these cases, and without changing the structure of our code?
 ;; =====
 (defrec factorial [n]
   (if (< n 2)
-    n
+    1
     (*' n (rec (factorial (dec n))))))
 
 (factorial 5000)
