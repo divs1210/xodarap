@@ -31,3 +31,28 @@
 (deftest mutual-recursion-test
   (is (ODD? 10001))
   (is (EVEN? 10000)))
+
+
+;; Docstring Support
+;; =================
+(defrec f-no-docstring
+  [x]
+  (if (zero? x)
+    true
+    (rec (f-no-docstring (dec x)))))
+
+(defrec f-docstring
+  "This is my docstring!"
+  [x]
+  (if (zero? x)
+    true
+    (rec (f-docstring (dec x)))))
+
+(deftest docstring-test
+  (is (= true
+         (f-docstring 1000)
+         (f-no-docstring 1000)))
+  (is (= "This is my docstring!"
+         (:doc (meta #'f-docstring))))
+  (is (= ""
+         (:doc (meta #'f-no-docstring)))))
