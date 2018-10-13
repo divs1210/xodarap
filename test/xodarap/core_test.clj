@@ -1,6 +1,6 @@
 (ns xodarap.core-test
   (:require [clojure.test :refer :all]
-            [xodarap.core :as core :refer :all]))
+            [xodarap.core :refer :all]))
 
 ;; Simple Recursion
 ;; ================
@@ -12,6 +12,7 @@
 (deftest simple-recursion-test
   (is (== (apply *' (range 1 10001))
           (fact 10000))))
+
 
 ;; Mutual Recursion
 ;; ================
@@ -31,9 +32,9 @@
   (is (ODD? 10001))
   (is (EVEN? 10000)))
 
+
 ;; Docstring Support
 ;; =================
-
 (defrec f-no-docstring
   [x]
   (if (zero? x)
@@ -55,15 +56,3 @@
          (:doc (meta #'f-docstring))))
   (is (= ""
          (:doc (meta #'f-no-docstring)))))
-
-(deftest parse-params-test
-  (is (= {:name 'foo
-          :doc "Docstring"
-          :argv ['a 'b]
-          :body (list + 'a 'b)}
-         (#'core/parse-params ['foo "Docstring" ['a 'b] + 'a 'b])))
-  (is (= {:name 'foo
-          :doc ""
-          :argv ['a 'b]
-          :body (list + 'a 'b)}
-         (#'core/parse-params ['foo ['a 'b] + 'a 'b]))))

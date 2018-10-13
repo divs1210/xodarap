@@ -1,5 +1,6 @@
 (ns xodarap.core
-  (:require [clojure.core.async :refer [go <! <!!]]))
+  (:require [clojure.core.async :refer [<! <!! go]]
+            [xodarap.macro-utils :refer [add-meta parse-params]]))
 
 (defonce ^:const rec-prefix "__rec__:")
 
@@ -9,27 +10,6 @@
   (cons `declare
         (for [name names]
           (symbol (str rec-prefix name)))))
-
-(defn- add-meta
-  "merge any key values from opts into the meta data of
-  the desired var."
-  [name opts]
-  (with-meta name (merge (meta name) opts)))
-
-(defn- parse-params
-  "Used to handle determining which parameters are
-  meant to be docstring or argv. Returns a map of all
-  arguments that defrec uses."
-  [args]
-  (let [second-arg (second args)
-        docstring (when (string? second-arg)
-                    second-arg)]
-    {:name (first args)
-     :doc (str docstring)
-     :argv (if (vector? second-arg)
-             second-arg
-             (nth args 2))
-     :body (drop (if docstring 3 2) args)}))
 
 (defmacro defrec
   "Like `defn`, but defines a recursive fn that
