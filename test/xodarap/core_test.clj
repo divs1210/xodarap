@@ -1,6 +1,7 @@
 (ns xodarap.core-test
   (:require [clojure.test :refer :all]
-            [xodarap.core :refer :all]))
+            [xodarap.core :refer :all]
+            [xodarap.private-fn :as private-fn]))
 
 ;; Simple Recursion
 ;; ================
@@ -56,3 +57,15 @@
          (:doc (meta #'f-docstring))))
   (is (= ""
          (:doc (meta #'f-no-docstring)))))
+
+;; Private function definition
+;; ===========================
+
+(deftest private-defspec-test
+  (is (= 120
+         (private-fn/public-recursive 5)
+         (#'private-fn/private-recursive 5))
+      "Test that private fn acts the same as the public version.")
+  (testing "Check the value of private in function meta data"
+    (is (false? (-> private-fn/public-recursive var meta :private)))
+    (is (true? (-> private-fn/private-recursive var meta :private)))))
