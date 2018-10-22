@@ -11,14 +11,12 @@
         (for [name names]
           (symbol (str rec-prefix name)))))
 
-(defmacro defrec
-  "Like `defn`, but defines a recursive fn that
-  doesn't blow the stack iff recursive calls are
-  wrapped in `rec`."
-  [& args]
+(defn- defrec*
+  [args & [private?]]
   (let [{:keys [name doc argv body]} (parse-params args)
         internal-name (symbol (str rec-prefix name))
-        meta-data {:doc doc}]
+        meta-data {:doc doc
+                   :private (boolean private?)}]
     `(do
        (defn ~(add-meta internal-name meta-data)
          ~argv
@@ -26,6 +24,20 @@
        (defn ~(add-meta name meta-data)
          ~argv
          (<!! (~internal-name ~@argv))))))
+
+(defmacro defrec
+  "Like `defn`, but defines a recursive fn that
+  doesn't blow the stack iff recursive calls are
+  wrapped in `rec`."
+  [& args]
+  (defrec* args))
+
+(defmacro defrec-
+  "Like `defn`, but defines a private recursive fn
+  that doesn't blow the stack iff recursive calls
+  are wrapped in `rec`."
+  [& args]
+  (defrec* args true))
 
 (letfn [(internal-sym-name [sym]
           (let [ns (namespace sym)
