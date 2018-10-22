@@ -58,9 +58,9 @@
   (is (= ""
          (:doc (meta #'f-no-docstring)))))
 
+
 ;; Private function definition
 ;; ===========================
-
 (deftest private-defspec-test
   (is (= 120
          (private-fn/public-recursive 5)
