@@ -1,4 +1,4 @@
-(defproject xodarap "0.1.0"
+(defproject xodarap "0.1.1"
   :description "Fearless recursion in Clojure!"
   :url "http://github.com/divs1210/xodarap"
   :license {:name "Eclipse Public License"
