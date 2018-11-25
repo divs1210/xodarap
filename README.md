@@ -61,7 +61,7 @@ in all these cases, and without changing the structure of our code?
 
 ## Usage
 
-**Leiningen**: [xodarap "0.1.0-SNAPSHOT"] 
+**Leiningen**: [xodarap "0.1.0"]
 
 ```clojure
 (use 'xodarap.core)
