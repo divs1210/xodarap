@@ -1,4 +1,4 @@
-# xodarap
+# xodarap [![Build Status](https://travis-ci.com/divs1210/xodarap.svg?branch=master)](https://travis-ci.com/divs1210/xodarap)
 
 Fearless recursion in Clojure!
 
