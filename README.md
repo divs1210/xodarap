@@ -41,19 +41,15 @@ Try converting the above to use tail recursion - possible, but not trivial.
 ```clojure
 ;; Ex. 3
 ;; =====
-(declare is-even?)
-
-(defn is-odd? [n]
-  (if (zero? n)
-    false
-    (is-even? (dec n))))
-
-(defn is-even? [n]
-  (if (zero? n)
-    true
-    (is-odd? (dec n))))
-
-(is-even? 10000)
+(letfn [(is-odd? [n]
+          (if (zero? n)
+            false
+            (is-even? (dec n))))
+        (is-even? [n]
+          (if (zero? n)
+            true
+            (is-odd? (dec n))))]
+  (is-even? 10000))
 ;; => StackOverflowError   clojure.lang.Numbers$LongOps.isZero (Numbers.java:443)
 ```
 Clojure's `recur` form doesn't help us here, so we generally end up using a [trampoline](https://clojuredocs.org/clojure.core/trampoline).
