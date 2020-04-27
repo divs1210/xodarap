@@ -1,10 +1,8 @@
 (ns xodarap.core-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest testing is]]
             [xodarap.core :refer [letrec rec recfn]]
             [xodarap.test-utils :as u]))
 
-;; recfn
-;; =====
 (deftest recfn-test
   (testing "simple recursion"
     (let [fact (recfn f [n]
@@ -24,22 +22,21 @@
               (fact-tail 1 50)))
       (is (u/infinity? (fact-tail 1 1000))))))
 
-;; letrec
-;; ======
-(deftest letrec-test
-  (letrec [(ODD? [n]
-             (if (zero? n)
-               false
-               (rec (EVEN? (dec n)))))
-           (EVEN? [n]
-             (if (zero? n)
-               true
-               (rec (ODD? (dec n)))))]
-   (is (ODD? 10001))
-   (is (EVEN? 10000))))
 
-;; defrec
-;; ======
+(deftest letrec-test
+  (testing "mutual recursion"
+    (letrec [(ODD? [n]
+               (if (zero? n)
+                 false
+                 (rec (EVEN? (dec n)))))
+             (EVEN? [n]
+               (if (zero? n)
+                 true
+                 (rec (ODD? (dec n)))))]
+            (is (ODD? 10001))
+            (is (EVEN? 10000)))))
+
+
 (deftest defrec-test
   (testing "works as expected"
     (is (== (apply *' (range 1 51))
@@ -51,5 +48,5 @@
            (:doc (meta #'u/fact)))))
 
   (testing "marking as private"
-    (is (-> u/fact var meta :private false?))
-    (is (-> u/private-fact var meta :private true?))))
+    (is (-> #'u/fact meta :private false?))
+    (is (-> #'u/private-fact meta :private true?))))
