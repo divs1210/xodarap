@@ -97,23 +97,29 @@ We can crack tougher nuts using the same method.
 ```clojure
 ;; Ex. 3
 ;; =====
-(declarec EVEN?)
-
-(defrec ODD? [n]
-  (if (zero? n)
-    false
-    (rec (EVEN? (dec n)))))
-
-(defrec EVEN? [n]
-  (if (zero? n)
-    true
-    (rec (ODD? (dec n)))))
-
-(EVEN? 10000)
+(letrec [(is-odd? [n]
+           (if (zero? n)
+             false
+             (rec (is-even? (dec n)))))
+         (is-even? [n]
+           (if (zero? n)
+             true
+             (rec (is-odd? (dec n)))))]
+  (is-even? 10000))
 ;; => true
 ```
 
-Along with `defrec` and `rec`, we also use `declarec` in this example.
+Here we define mutually recursive functions using `letrec`.
+
+```clojure
+;; like fn
+(recfn fact [n]
+  (if (< n 2)
+    1
+    (*' n (rec (fact (dec n))))))
+```
+
+Similarly, `recfn` is an alternative to `fn`.
 
 ## License
 
