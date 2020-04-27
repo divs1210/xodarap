@@ -1,6 +1,6 @@
 (ns xodarap.core-test
   (:require [clojure.test :refer :all]
-            [xodarap.core :refer [recfn letrec defrec rec]]
+            [xodarap.core :refer [letrec rec recfn]]
             [xodarap.test-utils :as u]))
 
 ;; recfn
