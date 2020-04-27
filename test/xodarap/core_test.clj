@@ -1,6 +1,6 @@
 (ns xodarap.core-test
   (:require [clojure.test :refer :all]
-            [xodarap.core :refer :all]
+            [xodarap.core :refer [declarec defrec rec]]
             [xodarap.private-fn :as private-fn]))
 
 ;; Simple Recursion
@@ -11,8 +11,20 @@
     (*' n (rec (fact (dec n))))))
 
 (deftest simple-recursion-test
-  (is (== (apply *' (range 1 10001))
-          (fact 10000))))
+  (is (== (apply *' (range 1 51))
+          (fact 50))))
+
+
+;; Tail Recursion
+;; ==============
+(defrec fact-tail [f n]
+  (if (< n 2)
+    f
+    (recur (*' f n) (dec n))))
+
+(deftest tail-recursion-test
+  (is (== (apply *' (range 1 51))
+          (fact-tail 1 50))))
 
 
 ;; Mutual Recursion

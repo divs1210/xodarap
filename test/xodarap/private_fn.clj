@@ -1,5 +1,5 @@
 (ns xodarap.private-fn
-  (:require [xodarap.core :refer :all]))
+  (:require [xodarap.core :refer [defrec defrec- rec]]))
 
 (defrec public-recursive
   [n]

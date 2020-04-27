@@ -1,4 +1,6 @@
-# xodarap [![Build Status](https://travis-ci.com/divs1210/xodarap.svg?branch=master)](https://travis-ci.com/divs1210/xodarap)
+# xodarap
+[![Build Status](https://travis-ci.com/divs1210/xodarap.svg?branch=master)](https://travis-ci.com/divs1210/xodarap)
+[![Clojars Project](https://img.shields.io/clojars/v/xodarap.svg)](https://clojars.org/xodarap)
 
 Fearless recursion in Clojure!
 
@@ -26,8 +28,8 @@ but we are not always this lucky! Consider:
 ;; =====
 (defn unsafe-ackermann [m n] 
   (cond (zero? m) (inc n)
-        (zero? n) (unsafe-ackermann (dec m) 1)
-        :else (unsafe-ackermann (dec m) (unsafe-ackermann m (dec n)))))
+        (zero? n) (recur (dec m) 1)
+        :else (recur (dec m) (unsafe-ackermann m (dec n)))))
 
 (unsafe-ackermann 3 10)
 ;; => StackOverflowError   clojure.lang.Numbers$LongOps.inc (Numbers.java:545)
@@ -61,8 +63,6 @@ in all these cases, and without changing the structure of our code?
 
 ## Usage
 
-**Leiningen**: [xodarap "0.1.1"]
-
 ```clojure
 (use 'xodarap.core)
 
@@ -85,8 +85,8 @@ recursive call to itself is wrapped in a `rec` form.
 ;; =====
 (defrec ackermann [m n] 
   (cond (zero? m) (inc n)
-        (zero? n) (rec (ackermann (dec m) 1))
-        :else (rec (ackermann (dec m) (rec (ackermann m (dec n)))))))
+        (zero? n) (recur (dec m) 1)
+        :else (recur (dec m) (rec (ackermann m (dec n))))))
 
 (ackermann 3 10)
 ;; => 8189 (after a long pause)

@@ -1,5 +1,5 @@
 (ns xodarap.core
-  (:require [clojure.core.async :refer [<! <!! go]]
+  (:require [clojure.core.async :refer [<! <!! go-loop]]
             [xodarap.macro-utils :refer [add-meta parse-params]]))
 
 (defonce ^:const rec-prefix "__rec__:")
@@ -20,7 +20,10 @@
     `(do
        (defn ~(add-meta internal-name meta-data)
          ~argv
-         (go ~@body))
+         (go-loop [~@(for [arg argv
+                           arg [arg arg]]
+                       arg)]
+           ~@body))
        (defn ~(add-meta name meta-data)
          ~argv
          (<!! (~internal-name ~@argv))))))
@@ -28,14 +31,16 @@
 (defmacro defrec
   "Like `defn`, but defines a recursive fn that
   doesn't blow the stack iff recursive calls are
-  wrapped in `rec`."
+  wrapped in `rec`.
+  Tail calls can use `recur` normally."
   [& args]
   (defrec* args))
 
 (defmacro defrec-
   "Like `defn`, but defines a private recursive fn
   that doesn't blow the stack iff recursive calls
-  are wrapped in `rec`."
+  are wrapped in `rec`.
+  Tail calls can use `recur` normally."
   [& args]
   (defrec* args true))
 
