@@ -1,9 +1,6 @@
 (ns xodarap.test-utils
   (:require [xodarap.core :refer [defrec defrec- rec]]))
 
-(defn infinity? [x]
-  (.isInfinite (double x)))
-
 (defrec fact
   "test fn"
   [n]

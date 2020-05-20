@@ -9,18 +9,16 @@
                  (if (< n 2)
                    1
                    (*' n (rec (f (dec n))))))]
-      (is (== (apply *' (range 1 51))
-              (fact 50)))
-      (is (u/infinity? (fact 1000)))))
+      (is (== (apply *' (range 1 1001))
+              (fact 1000)))))
 
   (testing "tail recursion"
     (let [fact-tail (recfn f [acc n]
                       (if (< n 2)
                         acc
                         (recur (*' acc n) (dec n))))]
-      (is (== (apply *' (range 1 51))
-              (fact-tail 1 50)))
-      (is (u/infinity? (fact-tail 1 1000))))))
+      (is (== (apply *' (range 1 1001))
+              (fact-tail 1 1000))))))
 
 
 (deftest letrec-test
@@ -39,9 +37,8 @@
 
 (deftest defrec-test
   (testing "works as expected"
-    (is (== (apply *' (range 1 51))
-            (u/fact 50)))
-    (is (u/infinity? (u/fact 1000))))
+    (is (== (apply *' (range 1 1001))
+            (u/fact 1000))))
 
   (testing "docstring is attached"
     (is (= "test fn"
